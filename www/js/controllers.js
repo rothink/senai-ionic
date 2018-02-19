@@ -1,28 +1,86 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+    .controller('CadastroCtrl', function ($scope, Chats, $ionicPopup, $state) {
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+        $scope.pessoa = {
+            doador: true
+        }
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
+        $scope.save = function (pessoa) {
+            Chats.save(pessoa).then(function () {
+                $scope.pessoa = {};
+                Chats.all().then(function (pessoas) {
+                    $scope.pessoas = pessoas;
+                });
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+                $ionicPopup.alert({
+                    title: 'Alerta',
+                    template: 'Usuário cadastrado com sucesso'
+                }).then(function (res) {
+                    $state.go('tab.pessoas');
+                });
+            });
+        }
+    })
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
+    .controller('PessoasCtrl', function ($scope, Chats, $ionicPopup, $state) {
+
+        Chats.all().then(function (pessoas) {
+            $scope.pessoas = pessoas;
+        });
+
+        $scope.remove = function (id) {
+            Chats.remove(id).then(function() {
+                $ionicPopup.alert({
+                    title: 'Alerta',
+                    template: 'Usuário removido do sistema'
+                }).then(function (res) {
+                    Chats.all().then(function (pessoas) {
+                        $scope.pessoas = pessoas;
+                    });
+                    $state.go('tab.pessoas');
+                });
+            }, function(error){
+                $ionicPopup.alert({
+                    title: 'Alerta',
+                    template: 'Usuário não encontrado no sistema'
+                }).then(function (res) {
+                    $state.go('tab.pessoas');
+                });
+            });
+        };
+    })
+
+    .controller('DetailCtrl', function ($scope, $stateParams, Chats) {
+        $scope.chat = Chats.get($stateParams.chatId);
+    })
+
+    .controller('AccountCtrl', function ($scope, Chats, $ionicPopup, $state) {
+        Chats.getConfigs().then(function(config) {
+            $scope.configs = config;
+        });
+
+        $scope.removeAll = function () {
+            Chats.clear().then(function() {
+                $ionicPopup.alert({
+                    title: 'Alerta',
+                    template: 'Todos os usuários foram removidos'
+                }).then(function (res) {
+                    $state.go('tab.pessoas');
+                });
+            });
+        }
+
+        $scope.attStatusConfig = function() {
+            Chats.setConfigs($scope.configs).then(function() {
+                $ionicPopup.alert({
+                    title: 'Alerta',
+                    template: 'Configurações atualizadas'
+                }).then(function (res) {
+                    Chats.all().then(function (pessoas) {
+                        $scope.pessoas = pessoas;
+                    });
+                });
+            })
+        }
+    });

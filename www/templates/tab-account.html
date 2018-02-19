@@ -1,9 +1,12 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-  </ion-content>
+<ion-view view-title="Configurações">
+    <ion-content>
+        <ion-list>
+            <ion-toggle ng-model="configs.isShowOnlyDoador" ng-click="attStatusConfig()">
+                Mostrar apenas doadores de órgãos
+            </ion-toggle>
+            <button class="button button-block button-positive" ng-click="removeAll()">
+                Limpar todos os usuários
+            </button>
+        </ion-list>
+    </ion-content>
 </ion-view>
