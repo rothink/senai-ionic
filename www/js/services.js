@@ -7,7 +7,7 @@ angular.module('starter.services', ['ngStorage'])
         $localStorage = $localStorage.$default({
             pessoas: [],
             config: {
-                isShowOnlyDoador : false
+                
             }
         });
 
@@ -16,17 +16,18 @@ angular.module('starter.services', ['ngStorage'])
                 var config = $localStorage.config;
                 var pessoas = $localStorage.pessoas;
 
+                console.info(pessoas, 'antes do if');
+
                 if(config.isShowOnlyDoador == true) {
-                    console.info('SOMENTE DOADORES');
+                    console.info('só mostre os doadores');
                     for(var i=0; i<pessoas.length; i++) {
-                        console.info(!pessoas[i]);
                         if(!pessoas[i].doador) {
-                            console.info(pessoas[i]);
+                            console.info('acho um bicho que nõa é doador');
                             pessoas.splice(i,1);
-                            deferred.resolve();
                         }
                     }
                 }
+                console.info(pessoas, 'deoius do if');
                 deferred.resolve(pessoas);
                 return deferred.promise;
             },
@@ -71,8 +72,8 @@ angular.module('starter.services', ['ngStorage'])
                 deferred.resolve($localStorage.config);
                 return deferred.promise;
             },
-            setConfigs: function(configs) {
-                $localStorage.config.isShowOnlyDoador = !configs.isShowOnlyDoador;
+            setConfigs: function() {
+                $localStorage.config.isShowOnlyDoador = !$localStorage.config.isShowOnlyDoador;
                 deferred.resolve();
                 return deferred.promise;
             }

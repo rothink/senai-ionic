@@ -1,7 +1,7 @@
 <ion-view view-title="Configurações">
     <ion-content>
         <ion-list>
-            <ion-toggle ng-model="configs.isShowOnlyDoador" ng-click="attStatusConfig()">
+            <ion-toggle ng-model="config.isShowOnlyDoador" ng-click="attStatusConfig()" ng-checked="config.isShowOnlyDoador">
                 Mostrar apenas doadores de órgãos
             </ion-toggle>
             <button class="button button-block button-positive" ng-click="removeAll()">

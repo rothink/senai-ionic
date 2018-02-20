@@ -8,15 +8,11 @@ angular.module('starter.controllers', [])
 
         $scope.save = function (pessoa) {
             Chats.save(pessoa).then(function () {
-                $scope.pessoa = {};
-                Chats.all().then(function (pessoas) {
-                    $scope.pessoas = pessoas;
-                });
-
                 $ionicPopup.alert({
                     title: 'Alerta',
                     template: 'Usuário cadastrado com sucesso'
                 }).then(function (res) {
+                    $scope.pessoa = {};
                     $state.go('tab.pessoas');
                 });
             });
@@ -25,8 +21,11 @@ angular.module('starter.controllers', [])
 
     .controller('PessoasCtrl', function ($scope, Chats, $ionicPopup, $state) {
 
-        Chats.all().then(function (pessoas) {
-            $scope.pessoas = pessoas;
+        $scope.$on('$ionicView.enter', function(){
+            Chats.all().then(function (people) {
+                console.info('PEGUEI A LISTAGEM');
+                $scope.pessoas = people;
+            });
         });
 
         $scope.remove = function (id) {
@@ -57,7 +56,7 @@ angular.module('starter.controllers', [])
 
     .controller('AccountCtrl', function ($scope, Chats, $ionicPopup, $state) {
         Chats.getConfigs().then(function(config) {
-            $scope.configs = config;
+            $scope.config = config;
         });
 
         $scope.removeAll = function () {
@@ -72,13 +71,13 @@ angular.module('starter.controllers', [])
         }
 
         $scope.attStatusConfig = function() {
-            Chats.setConfigs($scope.configs).then(function() {
+            Chats.setConfigs($scope.config).then(function() {
                 $ionicPopup.alert({
                     title: 'Alerta',
                     template: 'Configurações atualizadas'
                 }).then(function (res) {
-                    Chats.all().then(function (pessoas) {
-                        $scope.pessoas = pessoas;
+                    Chats.all().then(function (people) {
+                        $state.go('tab.pessoas');
                     });
                 });
             })
