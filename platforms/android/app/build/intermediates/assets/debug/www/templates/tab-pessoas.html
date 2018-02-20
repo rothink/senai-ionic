@@ -1,0 +1,20 @@
+<ion-view view-title="Doadores cadastrados" ng-init="">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="p in pessoas" type="item-text-wrap" href="#/tab/detail/{{p.id}}" ng-if="pessoas">
+                <img ng-src="img/avatar.png">
+                <h2>{{p.nome}} {{p.sobrenome}}</h2>
+                <p>{{p.sobrenome}}</p>
+                <i class="icon ion-ios-people balanced" ng-if="p.doador == true"></i>
+                <ion-option-button class="button-assertive" ng-click="remove(p.id)">
+                    Remover
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+        <div class="card" ng-if="!pessoas">
+            <div class="item item-text-wrap">
+                Nenhum usuário cadastrado
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
